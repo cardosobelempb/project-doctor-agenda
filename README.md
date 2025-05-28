@@ -9,12 +9,16 @@
 ```
 npx create-next-app@15.3.2 project-doutor-agenda
 cd project-doutor-agenda
-
-# Dependências de desenvolvimento
 npm i react-icons
 npm i clsx
+npx shadcn@latest init
+
+
+# Dependências de desenvolvimento
 npm install prettier@3.5.3 prettier-plugin-tailwindcss@0.6.11 -D
 npm install eslint-plugin-simple-import-sort@12.1.1 -D
+
+
 
 
 ```
@@ -53,42 +57,37 @@ npm install eslint-plugin-simple-import-sort@12.1.1 -D
 # 🧩 Diagrama de Classes (Simplificado)
 
 ```
-+----------------+          +----------------+
-|     User       |<-------->|    Clinic      |
-+----------------+          +----------------+
-| id             |          | id             |
-| name           |          | name           |
-| email          |          | plan_type      |
-+----------------+          +----------------+
-        |                           |
-        |                           |
-        |                           v
-        |                +----------------+
-        |                |    Doctor      |
-        |                +----------------+
-        |                | id             |
-        |                | name           |
-        |                | availability   |
-        |                | price          |
-        |                +----------------+
-        |                           |
-        |                           v
-        |                +----------------+
-        |                |  Appointment   |
-        |                +----------------+
-        |                | id             |
-        |                | date_time      |
-        |                | doctor_id      |
-        |                | patient_id     |
-        |                +----------------+
-        |
-        |                +----------------+
-        |                |   Patient      |
-        |                +----------------+
-                         | id             |
-                         | name           |
-                         | clinic_id      |
-                         +----------------+
++------------------+          +-----------------+         +------------------+
+|      User        |<>--------|     Doctor      |<>-------|  DoctorClinic    |
++------------------+          +-----------------+         +------------------+
+| id: UUID         |          | id: UUID        |         | doctorId: UUID   |
+| name: String     |          | name: String    |         | clinicId: UUID   |
+| createdAt        |          | specialty       |         | createdAt        |
+| updatedAt        |          | availableFrom.. |         | updatedAt        |
+| deletedAt        |          | price: Decimal  |         | deletedAt        |
++------------------+          | userId: UUID    |         +------------------+
+                              +-----------------+
+                                      |
+                                      |
+                                      | 1
+                                      |
+                                     /_\
+                                      N
+                                 Appointments
+
++------------------+          +------------------+         +------------------+
+|     Patient      |<>--------|   Appointment    |<>-------|     Clinic       |
++------------------+          +------------------+         +------------------+
+| id: UUID         |          | id: UUID         |         | id: UUID         |
+| name: String     |          | status: String   |         | name: String     |
+| email            |          | createdAt        |         | createdAt        |
+| phone            |          | updatedAt        |         | updatedAt        |
+| gender           |          | deletedAt        |         | deletedAt        |
+| doctorId: UUID   |          | doctorId: UUID   |         +------------------+
+| clinicId: UUID   |          | patientId: UUID  |
+| userId: UUID     |          | clinicId: UUID   |
+| createdAt        |          | userId: UUID     |
++------------------+          +------------------+
 
 ```
 
@@ -101,3 +100,4 @@ npx prisma init
 npx prisma migrate dev
 
 ```
+
