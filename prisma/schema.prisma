@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+}
+
+enum STATUS_APPOINTMENT {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+  RESCHEDULED
+  WAITING
+  IN_PROGRESS
+  FAILED
+}
+
+model User {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  clinics      Clinic[]
+  appointments Appointment[]
+  doctors      Doctor[]
+  patients     Patient[]
+
+  @@index([deletedAt])
+  @@map("users")
+}
+
+model Doctor {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  avatarUrl            String?   @map("avatar_url")
+  specialty            String?
+  availableFromWeekDay Int       @default(1) @map("available_from_week_day")
+  availableToWeekDay   Int       @default(5) @map("available_to_week_day")
+  availableFromTime    DateTime  @map("available_from_time")
+  availableToTime      DateTime  @map("available_to_time")
+  price                Decimal   @default(0) @db.Decimal(12, 2)
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime? @updatedAt @map("updated_at")
+  deletedAt            DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  appointments Appointment[]
+  userId       String         @map("user_id") @db.Uuid
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  patients     Patient[]
+  clinics      DoctorClinic[]
+
+  @@index([deletedAt])
+  @@map("doctors")
+}
+
+model Clinic {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  userId       String         @map("user_id") @db.Uuid
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+  patients     Patient[]
+  doctors      DoctorClinic[]
+
+  @@index([deletedAt])
+  @@map("clinics")
+}
+
+model DoctorClinic {
+  doctorId String @map("doctor_id") @db.Uuid
+  clinicId String @map("clinic_id") @db.Uuid
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+
+  @@id([doctorId, clinicId])
+  @@map("doctor_clinic")
+}
+
+model Patient {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  email     String?   @unique
+  phone     String?   @unique
+  gender    GENDER?
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  userId       String?       @map("user_id") @db.Uuid
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  doctorId     String?       @map("doctor_id") @db.Uuid
+  doctor       Doctor?       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  clinicId     String?       @map("clinic_id") @db.Uuid
+  clinic       Clinic?       @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([deletedAt])
+  @@map("patients")
+}
+
+model Appointment {
+  id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  status    STATUS_APPOINTMENT @default(PENDING)
+  createdAt DateTime           @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime?          @updatedAt @map("updated_at")
+  deletedAt DateTime?          @map("deleted_at") @db.Timestamp(6)
+
+  clinicId  String? @map("clinic_id") @db.Uuid
+  clinic    Clinic? @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patientId String  @map("patient_id") @db.Uuid
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId  String  @map("doctor_id") @db.Uuid
+  doctor    Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  userId    String  @map("user_id") @db.Uuid
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([deletedAt])
+  @@map("appointments")
+}
