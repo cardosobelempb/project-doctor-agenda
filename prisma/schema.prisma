@@ -32,10 +32,10 @@ model User {
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
 
-  clinics      Clinic[]
   appointments Appointment[]
   doctors      Doctor[]
   patients     Patient[]
+  clinics      UserToClinic[]
 
   @@index([deletedAt])
   @@map("users")
@@ -56,10 +56,10 @@ model Doctor {
   deletedAt            DateTime? @map("deleted_at") @db.Timestamp(6)
 
   appointments Appointment[]
-  userId       String         @map("user_id") @db.Uuid
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String           @map("user_id") @db.Uuid
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   patients     Patient[]
-  clinics      DoctorClinic[]
+  clinics      DoctorToClinic[]
 
   @@index([deletedAt])
   @@map("doctors")
@@ -72,25 +72,41 @@ model Clinic {
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
 
-  userId       String         @map("user_id") @db.Uuid
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   appointments Appointment[]
   patients     Patient[]
-  doctors      DoctorClinic[]
+  doctors      DoctorToClinic[]
+  users        UserToClinic[]
 
   @@index([deletedAt])
   @@map("clinics")
 }
 
-model DoctorClinic {
+model DoctorToClinic {
   doctorId String @map("doctor_id") @db.Uuid
   clinicId String @map("clinic_id") @db.Uuid
 
-  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
-  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  doctor    Doctor    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  clinic    Clinic    @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
 
   @@id([doctorId, clinicId])
-  @@map("doctor_clinic")
+  @@map("doctor_to_clinic")
+}
+
+model UserToClinic {
+  userId   String @map("user_id") @db.Uuid
+  clinicId String @map("clinic_id") @db.Uuid
+
+  doctor    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clinic    Clinic    @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  @@id([userId, clinicId])
+  @@map("user_to_clinic")
 }
 
 model Patient {

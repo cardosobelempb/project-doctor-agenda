@@ -9,7 +9,7 @@ async function main() {
   await prisma.clinic.deleteMany();
   await prisma.patient.deleteMany();
   await prisma.appointment.deleteMany();
-  await prisma.doctorClinic.deleteMany();
+  await prisma.doctorToClinic.deleteMany();
 
   const user = await prisma.user.create({
     data: {
@@ -20,7 +20,11 @@ async function main() {
   const clinic = await prisma.clinic.create({
     data: {
       name: 'Central Clinic',
-      userId: user.id,
+      users: {
+        create: {
+          userId: user.id
+        }
+      },
     },
   })
 
