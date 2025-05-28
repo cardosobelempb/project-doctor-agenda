@@ -1,7 +1,6 @@
-import { clsx } from "clsx";
-
 import { ElementRoot } from "../element-root/element-root";
 import type { ElementRootProps } from "../utils/element.type";
+import { clsx } from "clsx";
 import { twClassBuilder } from "../utils/tw-class-builder";
 
 type BoxRootProps = ElementRootProps & {};

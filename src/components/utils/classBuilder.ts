@@ -1,14 +1,9 @@
 // classBuilder.ts
 
-import { BorderVariants, getBorderClasses } from "./border.utils";
-// seu módulo de borda
-import { ColorVariants, getColorClasses } from "./color.utils";
-// seu módulo de cores
-import { getPositionClasses, PositionVariants } from "./position.utils";
-// seu módulo de posição
-import { getSizeClasses, SizeVariants } from "./size.utils";
-
-// seu módulo de tamanho
+import { type ColorVariants, getColorClasses } from "../color.utils"; // seu módulo de cores
+import { type SizeVariants, getSizeClasses } from "./size.utils"; // seu módulo de tamanho
+import { type BorderVariants, getBorderClasses } from "./border.utils"; // seu módulo de borda
+import { type PositionVariants, getPositionClasses } from "./position.utils"; // seu módulo de posição
 
 // Tipo unificado para as variantes combinadas
 export type ClassBuilderVariants = ColorVariants &
@@ -34,11 +29,8 @@ export function buildClasses(variants: ClassBuilderVariants): string {
     py,
     pb,
     pt, // tamanhos
-    b,
-    bb,
-    be, 
-    br,
-    bt,
+    border,
+    ring,
     rounded, // bordas
     position,
     inset,
@@ -53,11 +45,7 @@ export function buildClasses(variants: ClassBuilderVariants): string {
 
   const colorClasses = getColorClasses({ bg, text, fill, strock });
   const sizeClasses = getSizeClasses({ w, h, p, px, py, pb, pt });
-  const borderClasses = getBorderClasses({   b,
-    bb,
-    be, 
-    br,
-    bt, rounded });
+  const borderClasses = getBorderClasses({ border, ring, rounded });
   const positionClasses = getPositionClasses({
     position,
     inset,

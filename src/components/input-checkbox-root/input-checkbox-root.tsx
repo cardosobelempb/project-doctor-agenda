@@ -1,8 +1,7 @@
-import { clsx } from "clsx";
-
-import { IconRoot } from "../icon-root/icon-root";
-import { InputRoot } from "../input-root/input-root";
 import type { ElementRootProps } from "../utils/element.type";
+import { clsx } from "clsx";
+import { InputRoot } from "../input-root/input-root";
+import { IconRoot } from "../icon-root/icon-root";
 
 export type CheckBoxRootProps = ElementRootProps & {};
 

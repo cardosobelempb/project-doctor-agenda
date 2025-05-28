@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import type { InputHTMLAttributes } from "react";
-
 import { ElementRoot } from "../element-root/element-root";
 import type { ElementRootProps } from "../utils/element.type";
 

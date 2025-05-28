@@ -1,9 +1,8 @@
-import { clsx } from "clsx";
-
 import { ElementRoot } from "../element-root/element-root";
 import { IconRoot } from "../icon-root/icon-root";
-import { getColorClasses } from "../utils/color.utils";
+import { getColorClasses } from "../color.utils";
 import type { ElementRootProps } from "../utils/element.type";
+import { clsx } from "clsx";
 
 type ButtonRootProps = ElementRootProps & {};
 

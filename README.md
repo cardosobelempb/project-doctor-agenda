@@ -10,8 +10,24 @@
 npx create-next-app@15.3.2 project-doutor-agenda
 cd project-doutor-agenda
 npm i react-icons
+npm i zod
 npm i clsx
 npx shadcn@latest init
+
+npx shadcn@latest add card
+npx shadcn@latest add tabs
+npx shadcn@latest add button
+npx shadcn@latest add input
+npx shadcn@latest add label
+
+
+npx shadcn@latest add form
+npm install react-hook-form
+
+
+
+
+
 
 
 # Dependências de desenvolvimento
@@ -100,4 +116,4 @@ npx prisma init
 npx prisma migrate dev
 
 ```
-
+# Certificado letra A
