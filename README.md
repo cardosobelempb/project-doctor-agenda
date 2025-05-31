@@ -24,18 +24,9 @@ npx shadcn@latest add label
 npx shadcn@latest add form
 npm install react-hook-form
 
-
-
-
-
-
-
 # Dependências de desenvolvimento
 npm install prettier@3.5.3 prettier-plugin-tailwindcss@0.6.11 -D
 npm install eslint-plugin-simple-import-sort@12.1.1 -D
-
-
-
 
 ```
 
@@ -116,4 +107,13 @@ npx prisma init
 npx prisma migrate dev
 
 ```
+
+# Auth
+
+```
+npm install @prisma/client @auth/prisma-adapter
+npm i bcryptjs
+
+```
+
 # Certificado letra A

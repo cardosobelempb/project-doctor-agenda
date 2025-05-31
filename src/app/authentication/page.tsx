@@ -1,6 +1,3 @@
-
-
-
 import FormLogin from '@/components/pages/authentication/form-login';
 import FormRegister from '@/components/pages/authentication/form-register';
 import {
